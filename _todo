@@ -1,0 +1,5 @@
+check dns entry is correct before request to Let's Encrypt (apache and nginx plugin)
+check dns MX entry is correct before request to Let's Encrypt (apache and nginx plugin)
+check if we already have a symlink and if he's valid (apache and nginx plugin)
+force ssl field to on when use Let's Encrypt (api access)
+disable ssl tab when use Let's Encrypt (webgui)

@@ -1,0 +1,15 @@
+--- /etc/nginx/nginx.conf.orig	2015-11-08 01:44:42.558552834 +0100
++++ /etc/nginx/nginx.conf	2015-11-08 02:10:51.275908452 +0100
+@@ -9,6 +9,12 @@
+ 
+ http {
+ 
++	server {
++		location ~ /.well-known/acme-challenge/(.*) {
++			default_type application/jose+json;
++		}
++	}
++
+ 	##
+ 	# Basic Settings
+ 	##
