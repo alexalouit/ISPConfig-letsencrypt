@@ -2,11 +2,11 @@ ISPConfig Let's Encrypt
 =========================
 
 
-# REQUIRREMENTS
+# REQUIREMENTS
 
 Let's Encrypt installed
 
-ISPConfig 3.0.5.4p8 or newer
+ISPConfig (select version in branche)
 
 Apache or Nginx
 
@@ -24,6 +24,11 @@ After install, a new checkbox will be available in editing website, just check i
 
 ## MANUAL INSTALLATION
 
+- go to dir
+```
+cd ISPConfig-letsencrypt
+```
+
 - patch or create Let's Encrypt configuration
 ```
 cp ./cli.ini /etc/letsencrypt/cli.ini
@@ -31,12 +36,9 @@ cp ./cli.ini /etc/letsencrypt/cli.ini
 patch /etc/letsencrypt/cli.ini < ./cli.ini.patch
 ```
 
-- patch ISPConfig
+- patch ISPConfig (merge all files from ./src to /usr/local/ispconfig)
 ```
-cp ispconfig.patch /usr/local/ispconfig/ispconfig.patch
-cd /usr/local/ispconfig
-patch -p3 < ./ispconfig.patch
-rm ./ispconfig.patch
+rsync -av ./src/ /usr/local/ispconfig/
 ```
 
 - prepare apache

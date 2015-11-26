@@ -141,24 +141,32 @@ if(!in_array("30 02 * * * /root/.local/share/letsencrypt/bin/letsencrypt-renewer
 		exec("echo '" . $line . "' >> ./crontab.tmp");
 	}
 
+/*
 	exec("cat ./crontab.tmp", $crontab);
 
-	if(empty(array_diff($output, $crontab))) {
+	$diff = array_diff($output, $crontab);
+	if(empty($diff)) {
 		exec("crontab ./crontab.tmp");
 		exec("rm ./crontab.tmp");
 	} else {
-	echo "ERROR: There was a problem with the cronjob temporary file.\n";
-	exit;
+		echo "ERROR: There was a problem with the cronjob temporary file.\n";
+		exit;
 	}
+*/
+exec("crontab ./crontab.tmp");
+exec("rm ./crontab.tmp");
 } else {
 		echo "Renewer already present in crontab.\n";
 }
 
-echo "And finally, patch ISPConfig.\n";
-exec("cp ispconfig.patch /usr/local/ispconfig/ispconfig.patch");
-exec("cd /usr/local/ispconfig");
-exec("patch -p3 < ./ispconfig.patch");
-exec("rm ./ispconfig.patch");
+echo "And finally, update ISPConfig.\n";
+
+if(!is_file("/usr/bin/rsync")) {
+	echo "ERROR: Unable to find rsync binary, install it or merge ./src to /usr/local/ispconfig manually.\n";
+	exit;
+}
+
+exec("rsync -av ./src/ /usr/local/ispconfig");
 
 echo "Done my job. Enjoy!\n";
 exit;
