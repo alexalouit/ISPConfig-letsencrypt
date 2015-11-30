@@ -953,13 +953,13 @@ class apache2_plugin {
 		//* Generate Let's Encrypt SSL certificat
 		if($data['new']['ssl'] == 'y' && $data['new']['ssl_letsencrypt'] == 'y') {
 			//* be sure to have good domain
-			$lddomain = (string) "--domains $domain";
+			$lddomain = (string) "$domain";
 			if($data['new']['subdomain'] == "www" OR $data['new']['subdomain'] == "*") {
 				$lddomain .= (string) " --domains www." . $domain;
 			}
 
-				$crt_tmp_file = "/etc/letsencrypt/live/".$lddomain."/cert.pem";
-				$key_tmp_file = "/etc/letsencrypt/live/".$lddomain."/privkey.pem";
+				$crt_tmp_file = "/etc/letsencrypt/live/".$domain."/cert.pem";
+				$key_tmp_file = "/etc/letsencrypt/live/".$domain."/privkey.pem";
 				$webroot = $data['new']['document_root']."/web";
 
 				//* check if we have already a Let's Encrypt cert
