@@ -24,6 +24,8 @@ After install, a new checkbox will be available in editing website, just check i
 
 ## MANUAL INSTALLATION
 
+- make your own backup!
+
 - go to dir
 ```
 cd ISPConfig-letsencrypt
