@@ -113,7 +113,7 @@ if(is_file("/etc/apache2/apache2.conf")) {
 
 if(is_file("/etc/nginx/nginx.conf")) {
 	echo "Backup Nginx file to " . $backup_dir . ".\n";
-	exec("cp /etc/nginx/nginx.conf " . $backup_dir . date("Ymdhis") . "-nginx.conf"; );
+	exec("cp /etc/nginx/nginx.conf " . $backup_dir . date("Ymdhis") . "-nginx.conf");
 	echo "Patch Nginx and reload it.\n";
 	exec("patch /etc/nginx/nginx.conf < ./nginx.conf.patch");
 	exec("service nginx reload");
