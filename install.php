@@ -84,13 +84,14 @@ if(!is_file("/root/.local/share/letsencrypt/bin/letsencrypt-renewer")) {
 	exit;
 }
 
-if(!is_file("/etc/letsencrypt/cli.ini")) {
-	echo "Let's Encrypt configuration file don't exist, create it.\n";
-	exec("cp ./cli.ini /etc/letsencrypt/cli.ini");
-} else {
-	echo "Let's Encrypt configuration file exist, patch it.\n";
-	exec("patch /etc/letsencrypt/cli.ini < ./cli.ini.patch");
+if(is_file("/etc/letsencrypt/cli.ini")) {
+	echo "Let's Encrypt configuration file exist, backup up and remove.\n";
+	exec("cp /etc/letsencrypt/cli.ini " . $backup_dir . date("Ymdhis") . "-letsencrypt.cli.ini");
+	exec("rm /etc/letsencrypt/cli.ini");
+
 }
+echo "Copy Let's Encrypt configuration.\n";
+exec("cp ./cli.ini /etc/letsencrypt/cli.ini");
 
 if(!$buffer = mysql_connect($clientdb_host, $clientdb_user, $clientdb_password)) {
 	echo "ERROR: There was a problem with the MySQL connection.\n";
@@ -102,10 +103,18 @@ mysql_db_query($conf['db_database'], "ALTER TABLE `web_domain` ADD `ssl_letsencr
 
 if(is_file("/etc/apache2/apache2.conf")) {
 	echo "Configure Apache and reload it.\n";
-	if(is_file("/etc/apache2/conf-available/letsencrypt.conf")) {
-		exec("rm /etc/apache2/conf-available/letsencrypt.conf");
+	if(is_dir("/etc/apache2/conf-available")) {
+		if(is_file("/etc/apache2/conf-available/letsencrypt.conf")) {
+			exec("rm /etc/apache2/conf-available/letsencrypt.conf");
+		}
+		exec("cp ./apache.letsencrypt.conf /etc/apache2/conf-available/letsencrypt.conf");
 	}
-	exec("cp ./apache.letsencrypt.conf /etc/apache2/conf-available/letsencrypt.conf");
+	if(is_dir("/etc/apache2/conf.d")) {
+		if(is_file("/etc/apache2/conf.d/letsencrypt.conf")) {
+			exec("rm /etc/apache2/conf.d/letsencrypt.conf");
+		}
+		exec("cp ./apache.letsencrypt.conf /etc/apache2/conf.d/letsencrypt.conf");
+	}
 	exec("a2enmod headers");
 	exec("a2enconf letsencrypt");
 	exec("service apache2 reload");

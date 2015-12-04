@@ -21,6 +21,8 @@ php -q install.php
 
 After install, a new checkbox will be available in editing website, just check it.
 
+Adjust server in ```/etc/letsencrypt/cli.ini```if isn't ``https://acme-v01.api.letsencrypt.org/directory```
+
 
 ## MANUAL INSTALLATION
 
@@ -31,11 +33,9 @@ After install, a new checkbox will be available in editing website, just check i
 cd ISPConfig-letsencrypt
 ```
 
-- patch or create Let's Encrypt configuration
+- create Let's Encrypt configuration
 ```
 cp ./cli.ini /etc/letsencrypt/cli.ini
- or
-patch /etc/letsencrypt/cli.ini < ./cli.ini.patch
 ```
 
 - patch ISPConfig (merge all files from ./src to /usr/local/ispconfig)

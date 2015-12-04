@@ -952,20 +952,38 @@ class apache2_plugin {
 
 		//* Generate Let's Encrypt SSL certificat
 		if($data['new']['ssl'] == 'y' && $data['new']['ssl_letsencrypt'] == 'y') {
+			$data['new']['ssl_domain'] = $domain;
+			$vhost_data['ssl_domain'] = $domain;
+
 			//* be sure to have good domain
 			$lddomain = (string) "$domain";
 			if($data['new']['subdomain'] == "www" OR $data['new']['subdomain'] == "*") {
 				$lddomain .= (string) " --domains www." . $domain;
 			}
 
-				$crt_tmp_file = "/etc/letsencrypt/live/".$domain."/cert.pem";
+				$crt_tmp_file = "/etc/letsencrypt/live/".$domain."/fullchain.pem";
 				$key_tmp_file = "/etc/letsencrypt/live/".$domain."/privkey.pem";
 				$webroot = $data['new']['document_root']."/web";
 
 				//* check if we have already a Let's Encrypt cert
 				if(!file_exists($crt_tmp_file) && !file_exists($key_tmp_file)) {
-				$app->log("Create Let's Encrypt SSL Cert for: $domain", LOGLEVEL_DEBUG);
-					exec("/root/.local/share/letsencrypt/bin/letsencrypt auth -a webroot --email postmaster@$domain --domains $lddomain --webroot-path $webroot --text --agree-tos");
+					$app->log("Create Let's Encrypt SSL Cert for: $domain", LOGLEVEL_DEBUG);
+
+					if(is_dir($webroot . "/.well-known/")) {
+						$app->log("Remove old challenge directory", LOGLEVEL_DEBUG);
+						$this->_exec("rm -rf " . $webroot . "/.well-known/");
+					}
+
+					$app->log("Create challenge directory", LOGLEVEL_DEBUG);
+					$app->system->mkdirpath($webroot . "/.well-known/");
+					$app->system->chown($webroot . "/.well-known/", $data['new']['system_user']);
+					$app->system->chgrp($webroot . "/.well-known/", $data['new']['system_group']);
+					$app->system->mkdirpath($webroot . "/.well-known/acme-challenge");
+					$app->system->chown($webroot . "/.well-known/acme-challenge/", $data['new']['system_user']);
+					$app->system->chgrp($webroot . "/.well-known/acme-challenge/", $data['new']['system_group']);
+					$app->system->chmod($webroot . "/.well-known/acme-challenge", "g+s");
+
+					$this->_exec("/root/.local/share/letsencrypt/bin/letsencrypt auth -a webroot --email postmaster@$domain --domains $lddomain --webroot-path $webroot");
 				};
 
 				//* check is been correctly created
