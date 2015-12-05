@@ -105,14 +105,6 @@ server {
         access_log /var/log/ispconfig/httpd/<tmpl_var name='domain'>/access.log combined;
 
         ## Disable .htaccess and other hidden files
-<tmpl_if name='ssl_letsencrypt' op='!=' value='y'>
-        location ~ /\. {
-            deny all;
-            access_log off;
-            log_not_found off;
-        }
-</tmpl_if>
-
         location = /favicon.ico {
             log_not_found off;
             access_log off;
