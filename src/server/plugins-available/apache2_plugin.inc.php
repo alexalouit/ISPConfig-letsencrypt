@@ -961,8 +961,9 @@ class apache2_plugin {
 				$lddomain .= (string) " --domains www." . $domain;
 			}
 
-				$crt_tmp_file = "/etc/letsencrypt/live/".$domain."/fullchain.pem";
+				$crt_tmp_file = "/etc/letsencrypt/live/".$domain."/cert.pem";
 				$key_tmp_file = "/etc/letsencrypt/live/".$domain."/privkey.pem";
+				$bundle_tmp_file = "/etc/letsencrypt/live/".$domain."/chain.pem";
 				$webroot = $data['new']['document_root']."/web";
 
 				//* check if we have already a Let's Encrypt cert
@@ -1011,6 +1012,18 @@ class apache2_plugin {
 						$this->create_relative_link(escapeshellcmd($crt_tmp_file), escapeshellcmd($crt_file));
 					} else {
 						exec("ln -s ".escapeshellcmd($crt_tmp_file)." ".escapeshellcmd($crt_file));
+					}
+
+					if(is_file($bundle_file)) {
+						$app->system->copy($bundle_file, $bundle_file.'.old.'.$date);
+						$app->system->chmod($bundle_file.'.old.'.$date, 0400);
+						$app->system->unlink($bundle_file);
+					}
+
+					if($web_config["website_symlinks_rel"] == 'y') {
+						$this->create_relative_link(escapeshellcmd($bundle_tmp_file), escapeshellcmd($bundle_file));
+					} else {
+						exec("ln -s ".escapeshellcmd($bundle_tmp_file)." ".escapeshellcmd($crt_file));
 					}
 
 					/* we don't need to store it.
