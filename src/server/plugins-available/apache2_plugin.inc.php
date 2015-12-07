@@ -1023,7 +1023,7 @@ class apache2_plugin {
 					if($web_config["website_symlinks_rel"] == 'y') {
 						$this->create_relative_link(escapeshellcmd($bundle_tmp_file), escapeshellcmd($bundle_file));
 					} else {
-						exec("ln -s ".escapeshellcmd($bundle_tmp_file)." ".escapeshellcmd($crt_file));
+						exec("ln -s ".escapeshellcmd($bundle_tmp_file)." ".escapeshellcmd($bundle_file));
 					}
 
 					/* we don't need to store it.
