@@ -951,15 +951,44 @@ class apache2_plugin {
 		*/
 
 		//* Generate Let's Encrypt SSL certificat
-		if($data['new']['ssl'] == 'y' && $data['new']['ssl_letsencrypt'] == 'y') {
-			$data['new']['ssl_domain'] = $domain;
-			$vhost_data['ssl_domain'] = $domain;
+		if($data['new']['ssl'] == 'y' && $data['new']['ssl_letsencrypt'] == 'y' && ( // ssl and let's encrypt is active
+			($data['old']['ssl'] == 'n' OR $data['old']['ssl_letsencrypt'] == 'n') // we have new let's encrypt configuration
+			OR ($data['old']['domain'] != $data['new']['domain']) // we have domain update
+			OR ($data['old']['subdomain'] != $data['new']['subdomain']) // we have new or update on "auto" subdomain
+			OR ($data['new']['type'] == 'subdomain') // we have new or update on subdomain
+		)) {
+				$data['new']['ssl_domain'] = $domain;
+				$vhost_data['ssl_domain'] = $domain;
 
-			//* be sure to have good domain
-			$lddomain = (string) "$domain";
-			if($data['new']['subdomain'] == "www" OR $data['new']['subdomain'] == "*") {
-				$lddomain .= (string) " --domains www." . $domain;
-			}
+				// default values
+				$temp_domains = array();
+				$lddomain = $domain;
+				$subdomains = null;
+
+				//* be sure to have good domain
+				if($data['new']['subdomain'] == "www" OR $data['new']['subdomain'] == "*") {
+					$temp_domains[] = "www." . $domain;
+				}
+
+				//* then, add subdomain if we have
+				$subdomains = $app->db->queryAllRecords('SELECT domain FROM web_domain WHERE parent_domain_id = '.intval($data['new']['domain_id'])." AND active = 'y' AND type = 'subdomain'");
+				if(is_array($subdomains)) {
+					foreach($subdomains as $subdomain) {
+						$temp_domains[] = $subdomain['domain'];
+					}
+				}
+
+				// prevent duplicate
+				$temp_domains = array_unique($temp_domains);
+
+				// generate cli format
+				foreach($temp_domains as $temp_domain) {
+					$lddomain .= (string) " --domains " . $temp_domain;
+				}
+
+				// useless data
+				unset($subdomains);
+				unset($temp_domains);
 
 				$crt_tmp_file = "/etc/letsencrypt/live/".$domain."/cert.pem";
 				$key_tmp_file = "/etc/letsencrypt/live/".$domain."/privkey.pem";

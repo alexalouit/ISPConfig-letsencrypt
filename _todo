@@ -3,6 +3,7 @@ check dns MX entry is correct before request to Let's Encrypt (apache and nginx 
 check if we already have a symlink and if he's valid (apache and nginx plugin)
 force ssl field to on when use Let's Encrypt (api access?)
 disable ssl tab when use Let's Encrypt (webgui)
-check dns entry is correct and MX domain
+support aliasdomain
+improve email policy
 check if is a symlink and is correct (if target is same)
 disable ssl & letsencrypt fields in database if we have error (and show notification?)

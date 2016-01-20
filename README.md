@@ -67,3 +67,33 @@ crontab -e
 ```
 ALTER TABLE `web_domain` ADD `ssl_letsencrypt` enum('n','y') NOT NULL DEFAULT 'n';
 ```
+
+
+## TROUBLESHOOTING
+
+update Let's Encrypt
+```
+cd /root/letsencrypt
+git fetch
+./letsencrypt-auto
+```
+
+see Let's Encrypt log
+```
+cat /var/log/letsencrypt/letsencrypt.log
+```
+
+see ISPConfig log
+```
+cat /var/log/ispconfig/ispconfig.log
+cat /var/log/ispconfig/cron.log
+```
+
+remove certs
+```
+rm -r /etc/letsencrypt/archive/$domain/
+rm -r /etc/letsencrypt/live/$domain/
+rm -r /etc/letsencrypt/renewal/$domain.conf
+```
+
+re-generate cert: uncheck SSL & Let's Encrypt, save, recheck and save

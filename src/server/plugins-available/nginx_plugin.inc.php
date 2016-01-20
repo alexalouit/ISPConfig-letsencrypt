@@ -1114,15 +1114,44 @@ class nginx_plugin {
 
 		$tpl->setVar('ssl_letsencrypt', "n");
 		//* Generate Let's Encrypt SSL certificat
-		if($data['new']['ssl'] == 'y' && $data['new']['ssl_letsencrypt'] == 'y') {
+		if($data['new']['ssl'] == 'y' && $data['new']['ssl_letsencrypt'] == 'y' && ( // ssl and let's encrypt is active
+			($data['old']['ssl'] == 'n' OR $data['old']['ssl_letsencrypt'] == 'n') // we have new let's encrypt configuration
+			OR ($data['old']['domain'] != $data['new']['domain']) // we have domain update
+			OR ($data['old']['subdomain'] != $data['new']['subdomain']) // we have new or update on "auto" subdomain
+			OR ($data['new']['type'] == 'subdomain') // we have new or update on subdomain
+		)) {
+
+			// default values
+			$temp_domains = array();
+			$lddomain = $domain;
+			$subdomains = null;
+
 			//* be sure to have good domain
-			$lddomain = (string) "$domain";
 			if($data['new']['subdomain'] == "www" OR $data['new']['subdomain'] == "*") {
-				$lddomain .= (string) " --domains www." . $domain;
+				$temp_domains[] = "www." . $domain;
 			}
 
+			//* then, add subdomain if we have
+			$subdomains = $app->db->queryAllRecords('SELECT domain FROM web_domain WHERE parent_domain_id = '.intval($data['new']['domain_id'])." AND active = 'y' AND type = 'subdomain'");
+			if(is_array($subdomains)) {
+				foreach($subdomains as $subdomain) {
+					$temp_domains[] = $subdomain['domain'];
+				}
+			}
+
+			// prevent duplicate
+			$temp_domains = array_unique($temp_domains);
+
+			// generate cli format
+			foreach($temp_domains a $temp_domain) {
+				$lddomain .= (string) " --domains " . $temp_domain;
+			}
+
+			// useless data
+			unset($subdomains);
+			unset($temp_domains);
+
 			$tpl->setVar('ssl_letsencrypt', "y");
-			//* TODO: check dns entry is correct
 			$crt_tmp_file = "/etc/letsencrypt/live/".$domain."/fullchain.pem";
 			$key_tmp_file = "/etc/letsencrypt/live/".$domain."/privkey.pem";
 			$webroot = $data['new']['document_root']."/web";
@@ -1138,7 +1167,7 @@ class nginx_plugin {
 
 				$app->log("Create challenge directory", LOGLEVEL_DEBUG);
 				$app->system->mkdirpath($webroot . "/.well-known/");
-				$app->system->chown($webroot . "/.well-known/", $$data['new']['system_user']);
+				$app->system->chown($webroot . "/.well-known/", $data['new']['system_user']);
 				$app->system->chgrp($webroot . "/.well-known/", $data['new']['system_group']);
 				$app->system->mkdirpath($webroot . "/.well-known/acme-challenge");
 				$app->system->chown($webroot . "/.well-known/acme-challenge/", $data['new']['system_user']);
