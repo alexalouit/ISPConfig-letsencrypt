@@ -1143,7 +1143,7 @@ class nginx_plugin {
 			$temp_domains = array_unique($temp_domains);
 
 			// generate cli format
-			foreach($temp_domains a $temp_domain) {
+			foreach($temp_domains as $temp_domain) {
 				$lddomain .= (string) " --domains " . $temp_domain;
 			}
 
