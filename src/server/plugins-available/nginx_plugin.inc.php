@@ -1119,12 +1119,14 @@ class nginx_plugin {
 			OR ($data['old']['domain'] != $data['new']['domain']) // we have domain update
 			OR ($data['old']['subdomain'] != $data['new']['subdomain']) // we have new or update on "auto" subdomain
 			OR ($data['new']['type'] == 'subdomain') // we have new or update on subdomain
+			OR ($data['old']['type'] == 'alias' OR $data['new']['type'] == 'alias') // we have new or update on alias domain
 		)) {
 
 			// default values
 			$temp_domains = array();
 			$lddomain = $domain;
 			$subdomains = null;
+			$aliasdomains = null;
 
 			//* be sure to have good domain
 			if($data['new']['subdomain'] == "www" OR $data['new']['subdomain'] == "*") {
@@ -1136,6 +1138,14 @@ class nginx_plugin {
 			if(is_array($subdomains)) {
 				foreach($subdomains as $subdomain) {
 					$temp_domains[] = $subdomain['domain'];
+				}
+			}
+
+			//* then, add alias domain if we have
+			$aliasdomains = $app->db->queryAllRecords('SELECT domain FROM web_domain WHERE parent_domain_id = '.intval($data['new']['domain_id'])." AND active = 'y' AND type = 'alias'");
+			if(is_array($aliasdomains)) {
+				foreach($aliasdomains as $aliasdomain) {
+					$temp_domains[] = $aliasdomain['domain'];
 				}
 			}
 
