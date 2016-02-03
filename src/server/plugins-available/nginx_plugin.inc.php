@@ -1184,7 +1184,7 @@ class nginx_plugin {
 				$app->system->chgrp($webroot . "/.well-known/acme-challenge/", $data['new']['system_group']);
 				$app->system->chmod($webroot . "/.well-known/acme-challenge", "g+s");
 
-				$this->_exec("/root/.local/share/letsencrypt/bin/letsencrypt auth -a webroot --email postmaster@$domain --domains $lddomain --webroot-path $webroot");
+				$this->_exec("/root/.local/share/letsencrypt/bin/letsencrypt auth -a webroot --email postmaster@$domain $lddomain --webroot-path $webroot");
 			};
 
 			//* check is been correctly created
