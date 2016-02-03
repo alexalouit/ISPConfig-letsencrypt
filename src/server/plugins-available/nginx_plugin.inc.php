@@ -1192,7 +1192,7 @@ class nginx_plugin {
 					$date = date("YmdHis");
 //* TODO: check if is a symlink, if target same keep it, either remove it
 				if(is_file($key_file)) {
-					$app->system->copy($key_file, $key_file.'.old'.$date);
+					$app->system->copy($key_file, $key_file.'.old.'.$date);
 					$app->system->chmod($key_file.'.old.'.$date, 0400);
 					$app->system->unlink($key_file);
 				}
