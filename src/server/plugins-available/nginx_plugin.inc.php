@@ -1142,10 +1142,13 @@ class nginx_plugin {
 			}
 
 			//* then, add alias domain if we have
-			$aliasdomains = $app->db->queryAllRecords('SELECT domain FROM web_domain WHERE parent_domain_id = '.intval($data['new']['domain_id'])." AND active = 'y' AND type = 'alias'");
+			$aliasdomains = $app->db->queryAllRecords('SELECT domain,subdomain FROM web_domain WHERE parent_domain_id = '.intval($data['new']['domain_id'])." AND active = 'y' AND type = 'alias'");
 			if(is_array($aliasdomains)) {
 				foreach($aliasdomains as $aliasdomain) {
 					$temp_domains[] = $aliasdomain['domain'];
+					if(isset($aliasdomain['subdomain']) && ! empty($aliasdomain['subdomain'])) {
+						$temp_domains[] = $aliasdomain['subdomain'] . "." . $aliasdomain['domain'];
+					}
 				}
 			}
 
