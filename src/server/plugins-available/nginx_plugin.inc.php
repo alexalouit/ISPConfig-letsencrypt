@@ -1152,7 +1152,7 @@ class nginx_plugin {
 						$temp_domains[] = $aliasdomain['subdomain'] . "." . $aliasdomain['domain'];
 					}
 					
-					foreach($s as $sub_prefixes) {
+					foreach($sub_prefixes as $s) {
 						$temp_domains[] = $s . $aliasdomain['domain'];
 					}
 				}
