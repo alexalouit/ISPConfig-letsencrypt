@@ -95,13 +95,13 @@ if(is_file("/etc/letsencrypt/cli.ini")) {
 echo "Copy Let's Encrypt configuration.\n";
 exec("cp ./cli.ini /etc/letsencrypt/cli.ini");
 
-if(!$buffer = mysql_connect($clientdb_host, $clientdb_user, $clientdb_password)) {
-	echo "ERROR: There was a problem with the MySQL connection.\n";
+if(!$buffer = mysqli_connect($clientdb_host, $clientdb_user, $clientdb_password,$conf['db_database'])) {
+	echo "ERROR: There was a problem with the MySQL connection - ".mysqli_connect_error();
 	exit;
 }
 
 echo "Start MySQL update..\n";
-mysql_db_query($conf['db_database'], "ALTER TABLE `web_domain` ADD `ssl_letsencrypt` enum('n','y') NOT NULL DEFAULT 'n';", $buffer);
+mysqli_query($buffer,"ALTER TABLE `web_domain` ADD `ssl_letsencrypt` enum('n','y') NOT NULL DEFAULT 'n';");
 
 if(is_file("/etc/apache2/apache2.conf")) {
 	echo "Configure Apache and reload it.\n";
