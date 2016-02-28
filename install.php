@@ -79,10 +79,12 @@ if(!is_file("/root/.local/share/letsencrypt/bin/letsencrypt")) {
 	exit;
 }
 
+/* This isnt useful anymore since this feature (letsencrypt-renewer) has been replaced with (letsencrypt renew)
 if(!is_file("/root/.local/share/letsencrypt/bin/letsencrypt-renewer")) {
 	echo "ERROR: Let's Encrypt ( /root/.local/share/letsencrypt/bin/letsencrypt-renewer ) is missing, install it corecctly!\n";
 	exit;
 }
+*/
 
 if(is_file("/etc/letsencrypt/cli.ini")) {
 	echo "Let's Encrypt configuration file exist, backup up and remove.\n";
