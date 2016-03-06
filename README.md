@@ -14,7 +14,7 @@ Apache or Nginx
 # INSTALLATION (as root)
 
 ```
-git clone https://github.com/alexalouit/ISPConfig-letsencrypt.git
+git clone https://github.com/razzbee/ISPConfig-letsencrypt.git
 cd ISPConfig-letsencrypt
 php -q install.php
 ```

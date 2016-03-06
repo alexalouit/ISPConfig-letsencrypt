@@ -38,10 +38,12 @@ if(!file_exists("/usr/local/ispconfig/server/lib/config.inc.php") OR !file_exist
 require_once "/usr/local/ispconfig/server/lib/config.inc.php";
 require_once "/usr/local/ispconfig/server/lib/mysql_clientdb.conf";
 
+/*
 if($conf["app_version"] != "3.0.5.4p8") {
 	echo "ERROR: This version is unsupported.\n";
 	exit;
 }
+*/
 
 if(!file_exists($backup_dir)) {
 	echo "Backup directory not found.\n";
@@ -79,10 +81,12 @@ if(!is_file("/root/.local/share/letsencrypt/bin/letsencrypt")) {
 	exit;
 }
 
+/* This isnt useful anymore since this feature (letsencrypt-renewer) has been replaced with (letsencrypt renew)
 if(!is_file("/root/.local/share/letsencrypt/bin/letsencrypt-renewer")) {
 	echo "ERROR: Let's Encrypt ( /root/.local/share/letsencrypt/bin/letsencrypt-renewer ) is missing, install it corecctly!\n";
 	exit;
 }
+*/
 
 if(is_file("/etc/letsencrypt/cli.ini")) {
 	echo "Let's Encrypt configuration file exist, backup up and remove.\n";
@@ -93,13 +97,13 @@ if(is_file("/etc/letsencrypt/cli.ini")) {
 echo "Copy Let's Encrypt configuration.\n";
 exec("cp ./cli.ini /etc/letsencrypt/cli.ini");
 
-if(!$buffer = mysql_connect($clientdb_host, $clientdb_user, $clientdb_password)) {
-	echo "ERROR: There was a problem with the MySQL connection.\n";
+if(!$buffer = mysqli_connect($clientdb_host, $clientdb_user, $clientdb_password,$conf['db_database'])) {
+	echo "ERROR: There was a problem with the MySQL connection - ".mysqli_connect_error();
 	exit;
 }
 
 echo "Start MySQL update..\n";
-mysql_db_query($conf['db_database'], "ALTER TABLE `web_domain` ADD `ssl_letsencrypt` enum('n','y') NOT NULL DEFAULT 'n';", $buffer);
+mysqli_query($buffer,"ALTER TABLE `web_domain` ADD `ssl_letsencrypt` enum('n','y') NOT NULL DEFAULT 'n';");
 
 if(is_file("/etc/apache2/apache2.conf")) {
 	echo "Configure Apache and reload it.\n";
@@ -137,10 +141,10 @@ if(!file_exists($backup_dir . $backup_file2 )) {
 
 exec("crontab -l", $output);
 
-if(!in_array("30 02 * * * /root/.local/share/letsencrypt/bin/letsencrypt-renewer >> /var/log/ispconfig/cron.log; done", $output)) {
+if(!in_array("30 02 * * * /root/.local/share/letsencrypt/bin/letsencrypt renew >> /var/log/ispconfig/cron.log; done", $output)) {
 	echo "Add a cronjob for renewal certs\n";
 
-	$output[] = "30 02 * * * /root/.local/share/letsencrypt/bin/letsencrypt-renewer >> /var/log/ispconfig/cron.log; done";
+	$output[] = "30 02 * * * /root/.local/share/letsencrypt/bin/letsencrypt renew >> /var/log/ispconfig/cron.log; done";
 
 	exec("touch ./crontab.tmp");
 	if(!is_file("./crontab.tmp")) {
