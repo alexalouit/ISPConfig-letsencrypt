@@ -38,10 +38,12 @@ if(!file_exists("/usr/local/ispconfig/server/lib/config.inc.php") OR !file_exist
 require_once "/usr/local/ispconfig/server/lib/config.inc.php";
 require_once "/usr/local/ispconfig/server/lib/mysql_clientdb.conf";
 
+/*
 if($conf["app_version"] != "3.0.5.4p8") {
 	echo "ERROR: This version is unsupported.\n";
 	exit;
 }
+*/
 
 if(!file_exists($backup_dir)) {
 	echo "Backup directory not found.\n";
@@ -139,10 +141,10 @@ if(!file_exists($backup_dir . $backup_file2 )) {
 
 exec("crontab -l", $output);
 
-if(!in_array("30 02 * * * /root/.local/share/letsencrypt/bin/letsencrypt-renewer >> /var/log/ispconfig/cron.log; done", $output)) {
+if(!in_array("30 02 * * * /root/.local/share/letsencrypt/bin/letsencrypt renew >> /var/log/ispconfig/cron.log; done", $output)) {
 	echo "Add a cronjob for renewal certs\n";
 
-	$output[] = "30 02 * * * /root/.local/share/letsencrypt/bin/letsencrypt-renewer >> /var/log/ispconfig/cron.log; done";
+	$output[] = "30 02 * * * /root/.local/share/letsencrypt/bin/letsencrypt renew >> /var/log/ispconfig/cron.log; done";
 
 	exec("touch ./crontab.tmp");
 	if(!is_file("./crontab.tmp")) {
