@@ -78,12 +78,12 @@ if(!is_file("/root/.local/share/letsencrypt/bin/letsencrypt")) {
 	echo "ERROR: Let's Encrypt ( /root/.local/share/letsencrypt/bin/letsencrypt ) is missing, install it corecctly!\n";
 	exit;
 }
-
+/*
 if(!is_file("/root/.local/share/letsencrypt/bin/letsencrypt-renewer")) {
 	echo "ERROR: Let's Encrypt ( /root/.local/share/letsencrypt/bin/letsencrypt-renewer ) is missing, install it corecctly!\n";
 	exit;
 }
-
+*/
 if(is_file("/etc/letsencrypt/cli.ini")) {
 	echo "Let's Encrypt configuration file exist, backup up and remove.\n";
 	exec("cp /etc/letsencrypt/cli.ini " . $backup_dir . date("Ymdhis") . "-letsencrypt.cli.ini");
@@ -137,10 +137,10 @@ if(!file_exists($backup_dir . $backup_file2 )) {
 
 exec("crontab -l", $output);
 
-if(!in_array("30 02 * * * /root/.local/share/letsencrypt/bin/letsencrypt-renewer >> /var/log/ispconfig/cron.log; done", $output)) {
+if(!in_array("30 02 * * * /root/.local/share/letsencrypt/bin/letsencrypt renew >> /var/log/ispconfig/cron.log;", $output)) {
 	echo "Add a cronjob for renewal certs\n";
 
-	$output[] = "30 02 * * * /root/.local/share/letsencrypt/bin/letsencrypt-renewer >> /var/log/ispconfig/cron.log; done";
+	$output[] = "30 02 * * * /root/.local/share/letsencrypt/bin/letsencrypt renew >> /var/log/ispconfig/cron.log;";
 
 	exec("touch ./crontab.tmp");
 	if(!is_file("./crontab.tmp")) {
