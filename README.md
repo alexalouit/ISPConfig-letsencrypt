@@ -60,7 +60,7 @@ service nginx reload
 - create a cron for automatic renewal:
 ```
 crontab -e
-30 02 * * * /root/.local/share/letsencrypt/bin/letsencrypt-renewer >> /var/log/ispconfig/cron.log; done
+30 02 * * * /root/.local/share/letsencrypt/bin/letsencrypt renew >> /var/log/ispconfig/cron.log
 ```
 
 - sql queries:
