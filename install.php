@@ -38,7 +38,7 @@ if(!file_exists("/usr/local/ispconfig/server/lib/config.inc.php") OR !file_exist
 require_once "/usr/local/ispconfig/server/lib/config.inc.php";
 require_once "/usr/local/ispconfig/server/lib/mysql_clientdb.conf";
 
-if($conf["app_version"] != "3.0.5.4p8") {
+if($conf["app_version"] != "3.0.5.4p8" && $conf['app_version'] != "3.0.5.4p9") {
 	echo "ERROR: This version is unsupported.\n";
 	exit;
 }
