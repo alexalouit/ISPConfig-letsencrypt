@@ -950,7 +950,7 @@ class apache2_plugin {
 		}
 		*/
 
-		//* Generate Let's Encrypt SSL certificat
+		// Generate Let's Encrypt SSL certificat
 		if($data['new']['ssl'] == 'y' && $data['new']['ssl_letsencrypt'] == 'y' && ( // ssl and let's encrypt is active
 			($data['old']['ssl'] == 'n' OR $data['old']['ssl_letsencrypt'] == 'n') // we have new let's encrypt configuration
 			OR ($data['old']['domain'] != $data['new']['domain']) // we have domain update
@@ -968,12 +968,12 @@ class apache2_plugin {
 				$aliasdomains = null;
 				$sub_prefixes = array();
 
-				//* be sure to have good domain
+				// be sure to have good domain
 				if($data['new']['subdomain'] == "www" OR $data['new']['subdomain'] == "*") {
 					$temp_domains[] = "www." . $domain;
 				}
 
-				//* then, add subdomain if we have
+				// then, add subdomain if we have
 				$subdomains = $app->db->queryAllRecords('SELECT domain FROM web_domain WHERE parent_domain_id = '.intval($data['new']['domain_id'])." AND active = 'y' AND type = 'subdomain'");
 				if(is_array($subdomains)) {
 					foreach($subdomains as $subdomain) {
@@ -982,7 +982,7 @@ class apache2_plugin {
 					}
 				}
 
-				//* then, add alias domain if we have
+				// then, add alias domain if we have
 				$aliasdomains = $app->db->queryAllRecords('SELECT domain,subdomain FROM web_domain WHERE parent_domain_id = '.intval($data['new']['domain_id'])." AND active = 'y' AND type = 'alias'");
 				if(is_array($aliasdomains)) {
 					foreach($aliasdomains as $aliasdomain) {
@@ -1012,7 +1012,7 @@ class apache2_plugin {
 				$crt_tmp_file = "/etc/letsencrypt/live/".$domain."/cert.pem";
 				$key_tmp_file = "/etc/letsencrypt/live/".$domain."/privkey.pem";
 				$bundle_tmp_file = "/etc/letsencrypt/live/".$domain."/chain.pem";
-				$webroot = $data['new']['document_root']."/web";
+                $webroot = $vhost_data['web_document_root_www'];
 
 				//* check if we have already a Let's Encrypt cert
 				if(!file_exists($crt_tmp_file) && !file_exists($key_tmp_file)) {
