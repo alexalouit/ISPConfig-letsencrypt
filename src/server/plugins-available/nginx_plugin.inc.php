@@ -1149,7 +1149,9 @@ class nginx_plugin {
 				foreach($aliasdomains as $aliasdomain) {
 					$temp_domains[] = $aliasdomain['domain'];
 					if(isset($aliasdomain['subdomain']) && ! empty($aliasdomain['subdomain'])) {
-						$temp_domains[] = $aliasdomain['subdomain'] . "." . $aliasdomain['domain'];
+						if($aliasdomain['subdomain'] != "none"){
+							$temp_domains[] = $aliasdomain['subdomain'] . "." . $aliasdomain['domain'];
+						}
 					}
 					
 					foreach($sub_prefixes as $s) {
