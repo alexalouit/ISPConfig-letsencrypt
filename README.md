@@ -1,6 +1,7 @@
 ISPConfig Let's Encrypt
 =========================
 
+Don't use this plugin with ISPConfig 3.1 (or newer), this plugin is natively included.
 
 # REQUIREMENTS
 
