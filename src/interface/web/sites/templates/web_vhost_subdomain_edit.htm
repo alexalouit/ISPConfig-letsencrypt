@@ -1,0 +1,246 @@
+<h2><tmpl_var name="list_head_txt"></h2>
+<p><tmpl_var name="list_desc_txt"></p>
+
+<div class="panel panel_web_domain">
+
+    <div class="pnl_formsarea">
+        <fieldset class="inlineLabels">
+            <input type="hidden" name="server_id" id="server_id" value="{tmpl_var name='server_id_value'}" />
+            <tmpl_if name="domain_option">
+            <div class="ctrlHolder">
+                <label for="parent_domain_id">{tmpl_var name='parent_domain_id_txt'}</label>
+                <select id="parent_domain_id" name="parent_domain_id" class="selectInput formLengthHalf">{tmpl_var name='parent_domain_id'}</select>
+            </div>
+            </tmpl_if>
+            <div class="ctrlHolder">
+                <label for="domain">{tmpl_var name='host_txt'}</label>
+                <input name="domain" id="domain" value="{tmpl_var name='domain'}" size="30" maxlength="255" type="text" class="textInput formLengthHalf" />
+            </div>
+            <tmpl_if name="domain_option">
+            <div class="ctrlHolder">
+                <label for="sel_domain">{tmpl_var name='domain_txt'}</label>
+                    <select name="sel_domain" id="sel_domain" class="selectInput">
+                        {tmpl_var name='domain_option'}
+                    </select>
+            </div>
+            <tmpl_else>
+            <div class="ctrlHolder">
+                <label for="parent_domain_id">{tmpl_var name='domain_txt'}</label>
+                <select id="parent_domain_id" name="parent_domain_id" class="selectInput formLengthHalf">{tmpl_var name='parent_domain_id'}</select>
+            </div>
+            </tmpl_if>
+            <div class="ctrlHolder">
+                <label for="web_folder">{tmpl_var name='web_folder_txt'}</label>
+                <input name="web_folder" id="web_folder" value="{tmpl_var name='web_folder'}" size="30" maxlength="100" type="text" class="textInput formLengthHalf"<tmpl_if name='fixed_folder' op='==' value='y'> readonly="readonly"</tmpl_if> />
+            </div>
+            <div class="ctrlHolder">
+                <label for="traffic_quota">{tmpl_var name='traffic_quota_txt'}</label>
+                <input name="traffic_quota" id="traffic_quota" value="{tmpl_var name='traffic_quota'}" size="7" maxlength="7" type="text" class="textInput formLengthLimit" />&nbsp;MB <tmpl_var name='traffic_quota_exceeded_txt'>
+            </div>
+            <tmpl_if name="limit_cgi" op="==" value="y"><div class="ctrlHolder">
+                <p class="label">{tmpl_var name='cgi_txt'}</p>
+                <div class="multiField">
+                    {tmpl_var name='cgi'}
+                </div>
+            </div></tmpl_if>
+            <tmpl_if name="limit_ssi" op="==" value="y"><div class="ctrlHolder">
+                <p class="label">{tmpl_var name='ssi_txt'}</p>
+                <div class="multiField">
+                    {tmpl_var name='ssi'}
+                </div>
+            </div></tmpl_if>
+            <tmpl_if name="limit_perl" op="==" value="y"><div class="ctrlHolder apache">
+                <p class="label">{tmpl_var name='perl_txt'}</p>
+                <div class="multiField">
+                    {tmpl_var name='perl'}
+                </div>
+            </div></tmpl_if>
+            <tmpl_if name="limit_ruby" op="==" value="y"><div class="ctrlHolder apache">
+                <p class="label">{tmpl_var name='ruby_txt'}</p>
+                <div class="multiField">
+                    {tmpl_var name='ruby'}
+                </div>
+            </div></tmpl_if>
+            <tmpl_if name="limit_python" op="==" value="y"><div class="ctrlHolder apache">
+                <p class="label">{tmpl_var name='python_txt'}</p>
+                <div class="multiField">
+                    {tmpl_var name='python'}
+                </div>
+            </div></tmpl_if>
+            <tmpl_if name="force_suexec" op="==" value="n"><div class="ctrlHolder apache">
+                <p class="label">{tmpl_var name='suexec_txt'}</p>
+                <div class="multiField">
+                    {tmpl_var name='suexec'}
+                </div>
+            </div></tmpl_if>
+            <tmpl_if name="limit_hterror" op="==" value="y"><div class="ctrlHolder">
+                <p class="label">{tmpl_var name='errordocs_txt'}</p>
+                <div class="multiField">
+                    {tmpl_var name='errordocs'}
+                </div>
+            </div></tmpl_if>
+
+            <div class="ctrlHolder">
+                <label for="subdomain">{tmpl_var name='subdomain_txt'}</label>
+                <select name="subdomain" id="subdomain" class="selectInput formLengthHalf">
+                    {tmpl_var name='subdomain'}
+                </select>
+            </div>
+            <tmpl_if name="limit_ssl" op="==" value="y"><div class="ctrlHolder">
+                <p class="label">{tmpl_var name='ssl_txt'}</p>
+                <div class="multiField">
+                    {tmpl_var name='ssl'}
+                </div>
+            </div>
+            <div class="ctrlHolder">
+                <p class="label">{tmpl_var name='ssl_letsencrypt_txt'}</p>
+                <div class="multiField">
+                    {tmpl_var name='ssl_letsencrypt'}
+                </div>
+            </div></tmpl_if>
+            <div class="ctrlHolder">
+                <label for="php">{tmpl_var name='php_txt'}</label>
+                <select name="php" id="php" class="selectInput formLengthHalf">
+                    {tmpl_var name='php'}
+                </select>
+            </div>
+            <div class="ctrlHolder fastcgi_php_version">
+                <label for="fastcgi_php_version">{tmpl_var name='fastcgi_php_version_txt'}</label>
+                <select name="fastcgi_php_version" id="fastcgi_php_version" class="selectInput formLengthHalf">
+                    {tmpl_var name='fastcgi_php_version'}
+                </select>
+            </div>
+            <div class="ctrlHolder">
+                <p class="label">{tmpl_var name='active_txt'}</p>
+                <div class="multiField">
+                    {tmpl_var name='active'}
+                </div>
+            </div>
+        </fieldset>
+
+        <input type="hidden" name="id" value="{tmpl_var name='id'}">
+
+        <div class="buttonHolder buttons">
+            <button id="dom-edit-submit" class="positive iconstxt icoPositive" type="button" value="{tmpl_var name='btn_save_txt'}"><span>{tmpl_var name='btn_save_txt'}</span></button>
+            <button class="negative iconstxt icoNegative" type="button" value="{tmpl_var name='btn_cancel_txt'}" onclick="loadContent('sites/web_vhost_subdomain_list.php');"><span>{tmpl_var name='btn_cancel_txt'}</span></button>
+        </div>
+    </div>
+
+</div>
+<script language="JavaScript" type="text/javascript">
+    var serverId;
+    var clientGroupId = jQuery('#client_group_id').val();
+    var serverIdDisabled = jQuery('#server_id_disabled').val();
+    if(serverIdDisabled > 0){
+        serverId = serverIdDisabled;
+    } else {
+        serverId = jQuery('#server_id').val();
+        jQuery('#server_id').change(function(){
+            serverId = $(this).val();
+            adjustForm();
+            reloadWebIP();
+            reloadFastcgiPHPVersions();
+        });
+    }
+    reloadServerId(true);
+		
+    jQuery('#client_group_id').change(function(){
+        clientGroupId = $(this).val();
+        reloadWebIP();
+    });
+		
+    if(jQuery('#php').val() == 'fast-cgi' || jQuery('#php').val() == 'php-fpm'){
+        jQuery('.fastcgi_php_version:hidden').show();
+    } else {
+        jQuery('.fastcgi_php_version:visible').hide();
+    }
+    jQuery('#php').change(function(){
+        reloadFastcgiPHPVersions();
+        if(jQuery(this).val() == 'fast-cgi' || jQuery(this).val() == 'php-fpm'){
+            jQuery('.fastcgi_php_version:hidden').show();
+        } else {
+            jQuery('.fastcgi_php_version:visible').hide();
+        }
+    });
+    jQuery('#parent_domain_id').change(function() {
+        reloadServerId(false);
+    });
+    
+    function reloadServerId(noFormChange) {
+        var parentWebId = jQuery('#parent_domain_id').val();
+        jQuery.getJSON('sites/ajax_get_json.php'+ '?' + Math.round(new Date().getTime()), {web_id : parentWebId, type : "getserverid"}, function(data) {
+            if(data.serverid) serverId = data.serverid;
+            adjustForm(noFormChange);
+            if(noFormChange) reloadFastcgiPHPVersions(noFormChange);
+        });
+    }
+    
+    function adjustForm(noFormChange){
+        jQuery.getJSON('sites/ajax_get_json.php'+ '?' + Math.round(new Date().getTime()), {server_id : serverId, type : "getservertype"}, function(data) {
+            if(data.servertype == "nginx"){
+                var selected = jQuery('#php').val();
+                jQuery('.apache').hide();
+                if(selected != "no" && selected != "php-fpm") {
+                    jQuery('#php option[value="php-fpm"]').attr('selected', 'selected').val('php-fpm');
+                }
+                jQuery('#php option[value="fast-cgi"]').hide();
+                jQuery('#php option[value="cgi"]').hide();
+                jQuery('#php option[value="mod"]').hide();
+                jQuery('#php option[value="suphp"]').hide();
+            } else {
+                jQuery('.apache').show();
+                jQuery('#php option[value="fast-cgi"]').show();
+                jQuery('#php option[value="cgi"]').show();
+                jQuery('#php option[value="mod"]').show();
+                jQuery('#php option[value="suphp"]').show();
+            }
+            if(noFormChange) {
+                resetFormChanged();
+                jQuery('#php').addClass('no-page-form-change').change();
+                jQuery('#php').removeClass('no-page-form-change');
+            } else {
+                jQuery('#php').change();
+            }
+        });
+    }
+		
+    function reloadWebIP() {
+        loadOptionInto('ip_address','sites/ajax_get_ip.php?ip_type=IPv4&server_id='+serverId+'&client_group_id='+clientGroupId);
+        loadOptionInto('ipv6_address','sites/ajax_get_ip.php?ip_type=IPv6&server_id='+serverId+'&client_group_id='+clientGroupId);
+    }
+		
+    function reloadFastcgiPHPVersions(noFormChange) {
+        jQuery.getJSON('sites/ajax_get_json.php'+ '?' + Math.round(new Date().getTime()), {server_id : serverId, php_type : jQuery('#php').val(), type : "getphpfastcgi"}, function(data) {
+            var options = '<option value="">Default</option>';
+            var phpfastcgiselected = '';
+            $.each(data, function(key, val) {
+                if($('#fastcgi_php_version').val() == key){
+                    phpfastcgiselected = ' selected="selected"';
+                } else {
+                    phpfastcgiselected = '';
+                }
+                options += '<option value="'+key+'"'+phpfastcgiselected+'>'+val+'</option>';
+            });
+            $('#fastcgi_php_version').html(options).change();
+            if(noFormChange) resetFormChanged();
+        });
+    }
+    
+    <tmpl_if name="readonly_tab">
+        jQuery('div.panel_web_domain').find('fieldset').find('input,select,button').bind('click mousedown', function(e) { e.preventDefault(); }).focus(function() { $(this).blur(); });
+        jQuery('#dom-edit-submit').click(function() {
+               submitForm('pageForm','sites/web_vhost_subdomain_edit.php');
+        });
+    <tmpl_else>
+        jQuery('#dom-edit-submit').click(function() {
+            submitForm('pageForm','sites/web_vhost_subdomain_edit.php');
+        });
+    </tmpl_if>
+
+    jQuery('input#ssl_letsencrypt').bind('change', function() {
+        if(jQuery('input#ssl_letsencrypt').is(":checked")) jQuery('input#ssl').prop('checked', true);
+    });
+    jQuery('input#ssl').bind('change', function() {
+        if(jQuery('input#ssl_letsencrypt').is(":checked")) jQuery('input#ssl_letsencrypt').prop('checked', false);
+    }); 			
+</script>
